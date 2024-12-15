@@ -14,32 +14,59 @@ namespace XYZ_Snake_Game.Snake
 
         public override void OnArrowLeft()
         {
+            if(currentState != _gameplayState) {
+                return;
+            }
             _gameplayState.SetDirection(SnakeGameplayState.SnakeDir.Left);
         }
 
         public override void OnArrowUp()
         {
+            if (currentState != _gameplayState)
+            {
+                return;
+            }
             _gameplayState.SetDirection(SnakeGameplayState.SnakeDir.Up);
         }
 
         public override void OnArrowRight()
         {
+            if (currentState != _gameplayState)
+            {
+                return;
+            }
             _gameplayState.SetDirection(SnakeGameplayState.SnakeDir.Right);
         }
 
         public override void OnArrowDown()
         {
+            if (currentState != _gameplayState)
+            {
+                return;
+            }
             _gameplayState.SetDirection(SnakeGameplayState.SnakeDir.Down);
         }
 
         public override void Update(double deltaTime)
         {
-            _gameplayState.Update(deltaTime);
+            if (currentState != _gameplayState)
+            {
+                GotoGameplay();
+            }
         }
 
         public void GotoGameplay()
         {
+            _gameplayState.fieldWidth = screenWidth;
+            _gameplayState.fieldHeight = screenHeight;
             _gameplayState.Reset();
+            currentState = _gameplayState;
+            ChangeState(_gameplayState);
+        }
+
+        public override ConsoleColor[] CreatePallet()
+        {
+            return [ConsoleColor.Magenta, ConsoleColor.Red, ConsoleColor.DarkYellow];
         }
     }
 }

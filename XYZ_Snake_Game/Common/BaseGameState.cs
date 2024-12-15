@@ -11,5 +11,6 @@ namespace XYZ_Snake_Game.Common
 
         public abstract void Update(double deltaTime);
         public abstract void Reset();
+        public abstract void Draw(ConsoleRenderer renderer);
     }
 }

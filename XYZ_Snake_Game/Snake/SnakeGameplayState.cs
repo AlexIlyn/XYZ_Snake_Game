@@ -12,13 +12,18 @@ namespace XYZ_Snake_Game.Snake
         private SnakeDir _currentDir;
         private double _timeToMove;
         private List<Cell> _body;
+        public int fieldWidth { get; set; }
+        public int fieldHeight { get; set; }
+        public const char snakeBody = '■';
 
         public override void Reset()
         {
             _currentDir = SnakeDir.Right;
             _timeToMove = 0;
             _body = new List<Cell>();
-            _body.Add(new Cell(0, 0));
+            int middleX = fieldWidth / 2;
+            int middleY = fieldHeight / 2;
+            _body.Add(new Cell(middleX, middleY));
         }
 
         public override void Update(double deltaTime)
@@ -30,13 +35,12 @@ namespace XYZ_Snake_Game.Snake
             }
             else
             {
-                _timeToMove = 1f / 3f;
+                _timeToMove = 1f / 5f;
             }
             var head = _body[0];
             var nextCell = ShiftToCurrentDir(head);
             _body.Insert(0, nextCell);
             _body.RemoveAt(_body.Count - 1);
-            Console.WriteLine($"Snake position X: {nextCell.X} Y: {nextCell.Y}");
         }
 
         public void SetDirection(SnakeDir dirrection)
@@ -48,16 +52,24 @@ namespace XYZ_Snake_Game.Snake
             switch (_currentDir)
             {
                 case SnakeDir.Left:
-                    return new Cell(cell.X - 1, cell.Y);
+                    return new Cell((fieldWidth + cell.X - 1) % fieldWidth, cell.Y);
                 case SnakeDir.Up:
-                    return new Cell(cell.X, cell.Y - 1);
+                    return new Cell(cell.X, (fieldWidth + cell.Y - 1) % fieldHeight);
                 case SnakeDir.Right:
-                    return new Cell(cell.X + 1, cell.Y);
+                    return new Cell((fieldWidth + cell.X + 1) % fieldWidth, cell.Y);
                 case SnakeDir.Down:
-                    return new Cell(cell.X, cell.Y + 1);
+                    return new Cell(cell.X, (fieldWidth + cell.Y + 1) % fieldHeight);
             }
 
             return cell;
+        }
+
+        public override void Draw(ConsoleRenderer renderer)
+        {
+            for (int i = 0; i < _body.Count; i++)
+            {
+                renderer.SetPixel(_body[i].X, _body[i].Y, snakeBody, Convert.ToByte(i % 3));
+            }
         }
 
         internal struct Cell
