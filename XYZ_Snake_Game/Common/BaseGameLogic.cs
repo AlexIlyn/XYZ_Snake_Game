@@ -18,7 +18,7 @@ namespace XYZ_Snake_Game.Common
         }
 
         public void ChangeState(BaseGameState state) {
-            currentState.Reset();
+            currentState?.Reset();
             currentState = state;
         }
 
